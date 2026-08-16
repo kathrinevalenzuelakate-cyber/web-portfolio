@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kate Valenzuela — Technical VA &amp; E-commerce Specialist</title>
+  <meta name="description" content="Kathrine Kate Valenzuela — Technical Virtual Assistant and E-commerce Product Listing Specialist. Shopify web development, GMC-compliant listings, funnels, and AI-powered workflow automation." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============================================================
+       DESIGN TOKENS — change these to re-skin the whole site
+       ============================================================ */
+    :root {
+      --paper:      #EDEEF1;
+      --surface:    #FFFFFF;
+      --ink:        #14161B;
+      --muted:      #5A626E;
+      --line:       #E0E3E9;
+      --accent:     #2540F5;
+      --accent-dk:  #1A2FB8;
+      --accent-wash:rgba(37,64,245,0.08);
+
+      --maxw: 1080px;
+      --radius: 14px;
+      --ease: cubic-bezier(.2,.7,.2,1);
+
+      --font-display: "Space Grotesk", system-ui, sans-serif;
+      --font-body: "Inter", system-ui, sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      * { animation: none !important; transition: none !important; }
+    }
+    body {
+      font-family: var(--font-body);
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    ::selection { background: var(--accent); color: #fff; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+    .wrap { width: min(90%, var(--maxw)); margin-inline: auto; }
+
+    .skip { position: absolute; left: -999px; top: 0; z-index: 100; background: var(--ink); color: #fff; padding: 10px 16px; border-radius: 8px; }
+    .skip:focus { left: 16px; top: 16px; }
+
+    .eyebrow { font-family: var(--font-mono); font-size: .78rem; letter-spacing: .04em; color: var(--accent); margin-bottom: 1rem; }
+    .eyebrow::before { content: "// "; opacity: .55; }
+
+    /* ===== NAV ===== */
+    header.nav {
+      position: sticky; top: 0; z-index: 50;
+      background: color-mix(in srgb, var(--paper) 82%, transparent);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid transparent;
+      transition: border-color .3s var(--ease);
+    }
+    header.nav.scrolled { border-bottom-color: var(--line); }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; padding: 1.1rem 0; }
+    .brand { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; letter-spacing: -.01em; }
+    .brand span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a { font-size: .92rem; color: var(--muted); position: relative; padding: 4px 0; transition: color .2s var(--ease); }
+    .nav-links a::after { content: ""; position: absolute; left: 0; bottom: -2px; height: 2px; width: 0; background: var(--accent); transition: width .25s var(--ease); }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-toggle { display: none; background: none; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; cursor: pointer; font-family: var(--font-mono); font-size: .8rem; color: var(--ink); }
+    @media (max-width: 760px) {
+      .nav-links { position: fixed; inset: 64px 0 auto 0; flex-direction: column; gap: 0; background: var(--surface); border-bottom: 1px solid var(--line); padding: .5rem 0; transform: translateY(-120%); transition: transform .3s var(--ease); align-items: stretch; }
+      .nav-links.open { transform: translateY(0); }
+      .nav-links a { padding: .9rem 5%; border-top: 1px solid var(--line); }
+      .nav-toggle { display: block; }
+    }
+
+    /* ===== HERO ===== */
+    .hero { position: relative; padding: 7rem 0 4rem; }
+    .hero::before { content: ""; position: absolute; z-index: -1; top: 8%; left: -5%; width: 460px; height: 460px; background: radial-gradient(circle, var(--accent-wash), transparent 70%); filter: blur(10px); pointer-events: none; }
+    .hero-grid { display: grid; grid-template-columns: 1fr auto; gap: 3rem; align-items: center; }
+    .hero-photo { justify-self: end; }
+    .hero-photo img,
+    .hero-photo .avatar-fallback {
+      width: 220px; height: 220px; border-radius: 50%; object-fit: cover;
+      border: 3px solid var(--surface); box-shadow: 0 20px 45px -20px rgba(20,22,27,.35);
+      background: linear-gradient(135deg, var(--accent), var(--accent-dk));
+      display: grid; place-items: center;
+      font-family: var(--font-display); font-weight: 700; font-size: 3.2rem; color: #fff;
+    }
+    @media (max-width: 760px) {
+      .hero-grid { grid-template-columns: 1fr; text-align: center; }
+      .hero-photo { justify-self: center; order: -1; }
+      .hero-photo img, .hero-photo .avatar-fallback { width: 150px; height: 150px; font-size: 2.2rem; }
+      .cta-row { justify-content: center; }
+    }
+    .status { display: inline-flex; align-items: center; gap: .55rem; font-family: var(--font-mono); font-size: .8rem; color: var(--muted); border: 1px solid var(--line); background: var(--surface); padding: .4rem .8rem; border-radius: 999px; margin-bottom: 1.6rem; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: #16b364; box-shadow: 0 0 0 0 rgba(22,179,100,.5); animation: pulse 2.4s infinite; }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(22,179,100,.5); } 70% { box-shadow: 0 0 0 8px rgba(22,179,100,0); } 100% { box-shadow: 0 0 0 0 rgba(22,179,100,0); } }
+    .hero .role-tag { font-family: var(--font-mono); font-size: .9rem; color: var(--muted); margin-bottom: 1.1rem; }
+    .hero h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(2.8rem, 8.5vw, 5.6rem); line-height: .98; letter-spacing: -.03em; margin-bottom: 1.4rem; }
+    .hero h1 .accent { color: var(--accent); }
+    .hero .lede { font-size: clamp(1.05rem, 2.4vw, 1.35rem); color: var(--muted); max-width: 46ch; margin-bottom: 2.2rem; }
+    .hero .lede strong { color: var(--ink); font-weight: 600; }
+    .cta-row { display: flex; flex-wrap: wrap; gap: .8rem; align-items: center; }
+    .btn { display: inline-flex; align-items: center; gap: .5rem; font-weight: 500; font-size: .95rem; padding: .8rem 1.4rem; border-radius: 999px; transition: transform .2s var(--ease), background .2s var(--ease), border-color .2s var(--ease); }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-dk); transform: translateY(-2px); }
+    .btn-ghost { border: 1px solid var(--line); background: var(--surface); }
+    .btn-ghost:hover { border-color: var(--ink); transform: translateY(-2px); }
+
+    /* ===== SECTIONS ===== */
+    section { padding: 4.5rem 0; }
+    .section-head { max-width: 48ch; margin-bottom: 2.6rem; }
+    .section-head h2 { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.7rem, 4vw, 2.4rem); letter-spacing: -.02em; line-height: 1.1; }
+    .section-head p { color: var(--muted); margin-top: .8rem; }
+
+    /* ===== RESULTS (stat strip) ===== */
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+    .stat { background: var(--surface); padding: 1.6rem 1.4rem; }
+    .stat .num { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.8rem, 4vw, 2.6rem); letter-spacing: -.02em; color: var(--accent); line-height: 1; }
+    .stat .lbl { color: var(--muted); font-size: .9rem; margin-top: .5rem; }
+    @media (max-width: 760px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+
+    /* ===== ABOUT ===== */
+    .about-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 3rem; align-items: start; }
+    .about-grid p { color: var(--muted); font-size: 1.05rem; margin-bottom: 1rem; }
+    .about-grid p strong { color: var(--ink); font-weight: 600; }
+    .facts { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+    .fact { background: var(--surface); padding: 1.1rem 1.3rem; }
+    .fact dt { font-family: var(--font-mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+    .fact dd { font-family: var(--font-display); font-weight: 600; font-size: 1.05rem; margin-top: .2rem; }
+    @media (max-width: 760px) { .about-grid { grid-template-columns: 1fr; gap: 2rem; } }
+
+    /* ===== SKILLS ===== */
+    .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+    .skill-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.6rem; transition: border-color .25s var(--ease), transform .25s var(--ease); }
+    .skill-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .skill-card h3 { font-family: var(--font-display); font-size: 1.1rem; margin-bottom: .9rem; }
+    .chips { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .chip { font-family: var(--font-mono); font-size: .78rem; color: var(--muted); background: var(--paper); border: 1px solid var(--line); padding: .3rem .65rem; border-radius: 7px; }
+    @media (max-width: 900px) { .skills-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 560px) { .skills-grid { grid-template-columns: 1fr; } }
+
+    /* ===== WORK ===== */
+    .featured {
+      position: relative; display: grid; grid-template-columns: 1.05fr 1fr; gap: 0;
+      background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+      overflow: hidden; margin-bottom: 1.4rem;
+    }
+    .featured .media {
+      background: linear-gradient(135deg, #1f2937, #0f172a);
+      min-height: 300px; display: grid; place-items: center; padding: 2rem; text-align: center;
+    }
+    .featured .media .ph { font-family: var(--font-mono); font-size: .82rem; color: rgba(255,255,255,.65); line-height: 1.7; }
+    .featured .media .ph b { color: #fff; display: block; font-size: .95rem; margin-bottom: .4rem; }
+    .featured .body { padding: 2rem; }
+    .featured .role { font-family: var(--font-mono); font-size: .74rem; text-transform: uppercase; letter-spacing: .06em; color: var(--accent); }
+    .featured h3 { font-family: var(--font-display); font-size: 1.5rem; margin: .5rem 0 .7rem; letter-spacing: -.01em; }
+    .featured p { color: var(--muted); font-size: .98rem; margin-bottom: 1rem; }
+    .featured .chips { margin-bottom: 1.2rem; }
+    @media (max-width: 760px) { .featured { grid-template-columns: 1fr; } .featured .media { min-height: 200px; } }
+
+    .projects { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; }
+    .project { position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.7rem; overflow: hidden; transition: transform .28s var(--ease), box-shadow .28s var(--ease); }
+    .project::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform .3s var(--ease); }
+    .project:hover { transform: translateY(-4px); box-shadow: 0 18px 40px -22px rgba(20,22,27,.35); }
+    .project:hover::before { transform: scaleX(1); }
+    .project .role { font-family: var(--font-mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: var(--accent); }
+    .project h3 { font-family: var(--font-display); font-size: 1.2rem; margin: .5rem 0 .7rem; letter-spacing: -.01em; }
+    .project p { color: var(--muted); font-size: .93rem; }
+    @media (max-width: 900px) { .projects { grid-template-columns: 1fr; } }
+
+    /* ===== EXPERIENCE ===== */
+    .timeline { border-left: 2px solid var(--line); margin-left: 6px; }
+    .tl-item { position: relative; padding: 0 0 2.4rem 2rem; }
+    .tl-item:last-child { padding-bottom: 0; }
+    .tl-item::before { content: ""; position: absolute; left: -7px; top: 5px; width: 12px; height: 12px; border-radius: 50%; background: var(--paper); border: 2px solid var(--accent); }
+    .tl-item .when { font-family: var(--font-mono); font-size: .78rem; color: var(--muted); }
+    .tl-item h3 { font-family: var(--font-display); font-size: 1.15rem; margin: .25rem 0; }
+    .tl-item .org { color: var(--accent); font-weight: 500; font-size: .92rem; }
+    .tl-item ul { margin: .7rem 0 0; padding-left: 1.1rem; color: var(--muted); }
+    .tl-item li { margin-bottom: .3rem; }
+
+    /* ===== CONTACT ===== */
+    .contact { text-align: center; padding-bottom: 6rem; }
+    .contact h2 { font-family: var(--font-display); font-weight: 700; font-size: clamp(2rem, 6vw, 3.4rem); letter-spacing: -.03em; line-height: 1.05; margin-bottom: 1.2rem; }
+    .contact h2 a { color: var(--accent); border-bottom: 3px solid transparent; transition: border-color .2s var(--ease); }
+    .contact h2 a:hover { border-bottom-color: var(--accent); }
+    .contact p { color: var(--muted); max-width: 42ch; margin: 0 auto 2rem; }
+    .socials { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .socials a { font-family: var(--font-mono); font-size: .88rem; color: var(--muted); border: 1px solid var(--line); background: var(--surface); padding: .6rem 1.1rem; border-radius: 999px; transition: all .2s var(--ease); }
+    .socials a:hover { color: var(--ink); border-color: var(--ink); transform: translateY(-2px); }
+
+    /* ===== FOOTER ===== */
+    footer.site { border-top: 1px solid var(--line); padding: 2rem 0; }
+    footer.site .fwrap { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: space-between; font-family: var(--font-mono); font-size: .78rem; color: var(--muted); }
+
+    /* ===== reveal-on-scroll ===== */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity .6s var(--ease), transform .6s var(--ease); }
+    .reveal.in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } }
+  </style>
+</head>
+
+<body>
+  <a href="#main" class="skip">Skip to content</a>
+
+  <!-- ===================== NAV ===================== -->
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a href="#" class="brand">KV<span>.</span></a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="navlinks">menu</button>
+      <nav class="nav-links" id="navlinks">
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#work">Work</a>
+        <a href="#experience">Experience</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ===================== HERO ===================== -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <div class="status"><span class="dot"></span> Open to remote work</div>
+          <p class="role-tag">Technical Virtual Assistant &nbsp;·&nbsp; E-commerce Product Listing Specialist</p>
+          <h1>Kate <span class="accent">Valenzuela</span></h1>
+          <p class="lede">I help e-commerce brands run <strong>Shopify stores that convert</strong> — clean, GMC-compliant listings, front-end fixes, high-converting funnels, and <strong>AI-powered automation</strong> that keeps operations moving.</p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="mailto:kathrinevalenzuelakate@gmail.com">Get in touch</a>
+            <a class="btn btn-ghost" href="#work">View work</a>
+          </div>
+        </div>
+        <div class="hero-photo">
+          <img src="image/profile.jpg" alt="Kate Valenzuela" style="object-position: 50% 22%;">
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== ABOUT ===================== -->
+    <section id="about">
+      <div class="wrap">
+        <p class="eyebrow reveal">about</p>
+        <div class="about-grid">
+          <div class="reveal">
+            <p><strong>I'm a fresh BSIT graduate and e-commerce specialist</strong> with over a year of hands-on experience keeping Shopify stores running and converting.</p>
+            <p>My work sits on both sides of online retail — the <strong>technical side</strong> (store maintenance, front-end customization, landing pages, funnels, and automation) and the <strong>operational side</strong> (accurate, GMC-compliant product listings and clean, approval-ready feeds).</p>
+            <p>I'm known for accuracy and consistency, and I'm comfortable managing several moving tasks remotely with minimal supervision. I use AI tools like <strong>Claude, ChatGPT, and Gemini</strong> daily to speed up writing, product imagery, and workflow automation — without letting quality slip.</p>
+          </div>
+          <dl class="facts reveal">
+            <div class="fact"><dt>Focus</dt><dd>E-commerce &amp; Shopify</dd></div>
+            <div class="fact"><dt>Based in</dt><dd>Santa Rosa, PH</dd></div>
+            <div class="fact"><dt>Education</dt><dd>BSIT · 2026</dd></div>
+            <div class="fact"><dt>Availability</dt><dd>Remote · Open</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== SKILLS ===================== -->
+    <section id="skills">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow">skills</p>
+          <h2>What I work with</h2>
+        </div>
+        <div class="skills-grid">
+          <div class="skill-card reveal">
+            <h3>Platforms</h3>
+            <div class="chips">
+              <span class="chip">Shopify (Expert)</span><span class="chip">Google Merchant Center</span><span class="chip">Google Analytics</span>
+            </div>
+          </div>
+          <div class="skill-card reveal">
+            <h3>Web Development</h3>
+            <div class="chips">
+              <span class="chip">Store development</span><span class="chip">Front-end customization</span><span class="chip">Mobile-first</span><span class="chip">Landing pages</span>
+            </div>
+          </div>
+          <div class="skill-card reveal">
+            <h3>Technical VA</h3>
+            <div class="chips">
+              <span class="chip">Prompt engineering</span><span class="chip">Workflow automation</span><span class="chip">Funnels &amp; CRO</span><span class="chip">Cross-sell / upsell</span><span class="chip">Cart recovery</span>
+            </div>
+          </div>
+          <div class="skill-card reveal">
+            <h3>Product Listing</h3>
+            <div class="chips">
+              <span class="chip">GMC-compliant copy</span><span class="chip">SEO titles</span><span class="chip">Feed error resolution</span><span class="chip">Bulk listing</span>
+            </div>
+          </div>
+          <div class="skill-card reveal">
+            <h3>AI Tools</h3>
+            <div class="chips">
+              <span class="chip">Claude</span><span class="chip">ChatGPT</span><span class="chip">Gemini</span><span class="chip">AI product imagery</span>
+            </div>
+          </div>
+          <div class="skill-card reveal">
+            <h3>Research</h3>
+            <div class="chips">
+              <span class="chip">Product-market fit</span><span class="chip">Competitor analysis</span><span class="chip">Demand forecasting</span><span class="chip">Pricing psychology</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== WORK ===================== -->
+    <section id="work">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow">selected work</p>
+          <h2>Projects</h2>
+          <p>Clients kept confidential — described by what each store sells.</p>
+        </div>
+
+        <!-- FEATURED PROJECT -->
+        <div class="featured reveal">
+          <div class="media">
+            <!-- EDIT: replace this placeholder with your own anonymized screenshot,
+                 e.g. <img src="landing-preview.png" alt="Landing page preview" style="width:100%;height:100%;object-fit:cover"> -->
+            <div class="ph"><b>Add screenshot here</b>Drop in an anonymized preview<br>of the landing page</div>
+          </div>
+          <div class="body">
+            <span class="role">Shopify Pages · Landing Page · CRO</span>
+            <h3>High-Converting Product Landing Page</h3>
+            <p>Designed a campaign landing page for a <strong>premium outdoor living brand's</strong> louvered-pergola catalog. Built in Shopify Pages for a marketing push: a full-bleed hero with a clear quote CTA, product cards routing to individual product pages, an "at a glance" spec panel, a validated quote-request form, and an FAQ accordion — all tuned for conversion.</p>
+            <div class="chips">
+              <span class="chip">Shopify Pages</span><span class="chip">HTML / CSS</span><span class="chip">CRO</span><span class="chip">Form validation</span>
+            </div>
+            <a class="btn btn-ghost" href="#contact">Ask about this project</a>
+          </div>
+        </div>
+
+        <!-- OTHER PROJECTS -->
+        <div class="projects">
+          <article class="project reveal">
+            <span class="role">Web Dev · Technical VA</span>
+            <h3>Outdoor Living Gear Store</h3>
+            <p>Maintained a live premium storefront and built conversion funnels for robot mowers, saunas, and golf enclosures — plus custom Shopify sections, AI-assisted content, and automation workflows that cut manual work.</p>
+          </article>
+          <article class="project reveal">
+            <span class="role">Product Listing</span>
+            <h3>Kids Toys &amp; Essentials Store</h3>
+            <p>Ran end-to-end, GMC-compliant listings across every SKU. Resolved feed errors and kept Shopify-to-Merchant-Center sync clean for consistent Shopping visibility and faster approvals.</p>
+          </article>
+          <article class="project reveal">
+            <span class="role">Product Listing · AI Imagery</span>
+            <h3>Women's Fashion Store</h3>
+            <p>Created SEO-optimized listings tailored to the brand's voice, and produced consistent, on-brand AI product imagery with ChatGPT and Gemini — replacing generic stock with premium visuals.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== EXPERIENCE ===================== -->
+    <section id="experience">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow">experience</p>
+          <h2>Where I've worked</h2>
+          <p>All roles remote. Client names withheld for confidentiality.</p>
+        </div>
+        <div class="timeline">
+          <div class="tl-item reveal">
+            <p class="when">Recent · 5+ months</p>
+            <h3>Web Developer &amp; Technical Virtual Assistant</h3>
+            <p class="org">Premium Outdoor Living Gear Store — Remote Freelance</p>
+            <ul>
+              <li>Maintained and updated a Shopify store for premium outdoor and smart-home gear, keeping it fast, consistent, and conversion-ready.</li>
+              <li>Designed funnels, custom Shopify sections, and automation workflows; applied prompt engineering to speed up content and operations.</li>
+            </ul>
+          </div>
+          <div class="tl-item reveal">
+            <p class="when">1 year</p>
+            <h3>Product Listing Specialist</h3>
+            <p class="org">Kids Toys &amp; Essentials Store — Remote</p>
+            <ul>
+              <li>Managed end-to-end product data across all SKUs with GMC-compliant descriptions and clean feeds.</li>
+              <li>Identified and fixed feed errors to maximize Shopping visibility and speed up approvals.</li>
+            </ul>
+          </div>
+          <div class="tl-item reveal">
+            <p class="when">8 months</p>
+            <h3>Product Listing Specialist</h3>
+            <p class="org">Women's Fashion Store — Remote</p>
+            <ul>
+              <li>Crafted SEO-optimized, on-brand listings and generated premium AI product imagery.</li>
+              <li>Kept GMC-compliant feeds error-free and submitted daily structured progress reports.</li>
+            </ul>
+          </div>
+          <div class="tl-item reveal">
+            <p class="when">2023 – 2025</p>
+            <h3>Google Shopping Funnel Specialist</h3>
+            <p class="org">Freelance / Self-Employed — Remote</p>
+            <ul>
+              <li>Improved Shopping funnels through feed and data-quality work — raising CTR and qualified traffic.</li>
+              <li>Resolved Merchant Center approval and policy issues for consistent product exposure.</li>
+            </ul>
+          </div>
+          <div class="tl-item reveal">
+            <p class="when">2021 – 2022</p>
+            <h3>E-commerce Operations Assistant</h3>
+            <p class="org">Facebook Selling Page — Remote</p>
+            <ul>
+              <li>Managed the full customer journey from inquiry to post-purchase, improving inquiry-to-sale conversion.</li>
+            </ul>
+          </div>
+          <div class="tl-item reveal">
+            <p class="when">Graduated 2026</p>
+            <h3>BSc in Information Technology</h3>
+            <p class="org">STI College</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== CONTACT ===================== -->
+    <section id="contact" class="contact">
+      <div class="wrap">
+        <p class="eyebrow reveal" style="text-align:center">contact</p>
+        <h2 class="reveal">Let's grow your store.<br><a href="mailto:kathrinevalenzuelakate@gmail.com">kathrinevalenzuelakate@gmail.com</a></h2>
+        <p class="reveal">Available for remote Technical VA, Shopify, and product-listing work. Reply within one business day.</p>
+        <div class="socials reveal">
+          <a href="https://www.upwork.com/freelancers/~0169cc1fbe248e8502" target="_blank" rel="noopener">Upwork</a>
+          <a href="mailto:kathrinevalenzuelakate@gmail.com">Email</a>
+          <!-- EDIT: phone is optional on a public page — remove this line if you'd rather keep it private -->
+          <a href="tel:+639669560619">+63 966 956 0619</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site">
+    <div class="wrap fwrap">
+      <span>© <span id="year"></span> Kathrine Kate Valenzuela</span>
+      <span>Santa Rosa, Laguna · Built by hand</span>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const toggle = document.querySelector('.nav-toggle');
+    const links = document.getElementById('navlinks');
+    toggle.addEventListener('click', () => {
+      const open = links.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open);
+    });
+    links.querySelectorAll('a').forEach(a =>
+      a.addEventListener('click', () => { links.classList.remove('open'); toggle.setAttribute('aria-expanded', 'false'); })
+    );
+
+    const nav = document.querySelector('header.nav');
+    const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  </script>
+</body>
+</html>
