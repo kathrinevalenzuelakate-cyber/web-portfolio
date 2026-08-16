@@ -160,6 +160,16 @@
       background: linear-gradient(135deg, #1f2937, #0f172a);
       min-height: 300px; display: grid; place-items: center; padding: 2rem; text-align: center;
     }
+    .featured .media.clickable { padding: 0; position: relative; overflow: hidden; }
+    .featured .media.clickable::after {
+      content: "View PDF ↗"; position: absolute; right: 14px; bottom: 14px;
+      font-family: var(--font-mono); font-size: .78rem; color: #fff;
+      background: rgba(15,23,42,.75); padding: .4rem .8rem; border-radius: 999px;
+      opacity: 0; transform: translateY(6px); transition: opacity .22s var(--ease), transform .22s var(--ease);
+    }
+    .featured .media.clickable:hover::after { opacity: 1; transform: none; }
+    .featured .media.clickable img { transition: transform .35s var(--ease); }
+    .featured .media.clickable:hover img { transform: scale(1.03); }
     .featured .media .ph { font-family: var(--font-mono); font-size: .82rem; color: rgba(255,255,255,.65); line-height: 1.7; }
     .featured .media .ph b { color: #fff; display: block; font-size: .95rem; margin-bottom: .4rem; }
     .featured .body { padding: 2rem; }
@@ -244,7 +254,7 @@
           </div>
         </div>
         <div class="hero-photo">
-          <img src="image/profile.jpg" alt="Kate Valenzuela" style="object-position: 50% 22%;">
+          <img src="images/profile.jpg" alt="Kate Valenzuela" style="object-position: 50% 22%;">
         </div>
       </div>
     </section>
@@ -328,11 +338,9 @@
 
         <!-- FEATURED PROJECT -->
         <div class="featured reveal">
-          <div class="media">
-            <!-- EDIT: replace this placeholder with your own anonymized screenshot,
-                 e.g. <img src="landing-preview.png" alt="Landing page preview" style="width:100%;height:100%;object-fit:cover"> -->
-            <div class="ph"><b>Add screenshot here</b>Drop in an anonymized preview<br>of the landing page</div>
-          </div>
+          <a class="media clickable" href="pdfs/High-Converting_Product_Landing_Page.pdf" target="_blank" rel="noopener" aria-label="Open full case study PDF">
+            <img src="images/landing-page-preview.jpg" alt="High-Converting Product Landing Page case study preview" style="width:100%; height:100%; object-fit:cover; display:block; min-height:300px;">
+          </a>
           <div class="body">
             <span class="role">Shopify Pages · Landing Page · CRO</span>
             <h3>High-Converting Product Landing Page</h3>
@@ -340,7 +348,7 @@
             <div class="chips">
               <span class="chip">Shopify Pages</span><span class="chip">HTML / CSS</span><span class="chip">CRO</span><span class="chip">Form validation</span>
             </div>
-            <a class="btn btn-ghost" href="#contact">Ask about this project</a>
+            <a class="btn btn-ghost" href="pdfs/High-Converting_Product_Landing_Page.pdf" target="_blank" rel="noopener">View full case study (PDF)</a>
           </div>
         </div>
 
