@@ -232,15 +232,39 @@
     }
 
     /* ===== EXPERIENCE ===== */
-    .timeline { border-left: 2px solid var(--line); margin-left: 6px; }
-    .tl-item { position: relative; padding: 0 0 2.4rem 2rem; }
+    .timeline { position: relative; max-width: 900px; margin: 0 auto; }
+    .timeline::before {
+      content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 2px;
+      background: var(--line); transform: translateX(-50%);
+    }
+    .tl-item {
+      position: relative; width: calc(50% - 2.4rem); padding: 0 0 2.6rem; margin-bottom: 0.2rem;
+    }
     .tl-item:last-child { padding-bottom: 0; }
-    .tl-item::before { content: ""; position: absolute; left: -7px; top: 5px; width: 12px; height: 12px; border-radius: 50%; background: var(--paper); border: 2px solid var(--accent); }
+    .tl-item::before {
+      content: ""; position: absolute; top: 5px; width: 14px; height: 14px; border-radius: 50%;
+      background: var(--paper); border: 2px solid var(--accent); z-index: 1;
+    }
+    .tl-item:nth-child(odd) { left: 0; text-align: right; }
+    .tl-item:nth-child(odd)::before { right: -2.4rem; transform: translateX(50%); }
+    .tl-item:nth-child(even) { left: calc(50% + 2.4rem); text-align: left; }
+    .tl-item:nth-child(even)::before { left: -2.4rem; transform: translateX(-50%); }
+    .tl-item:nth-child(odd) ul { padding-left: 0; padding-right: 1.1rem; list-style-position: inside; }
     .tl-item .when { font-family: var(--font-mono); font-size: .78rem; color: var(--muted); }
     .tl-item h3 { font-family: var(--font-display); font-size: 1.15rem; margin: .25rem 0; }
     .tl-item .org { color: var(--accent); font-weight: 500; font-size: .92rem; }
     .tl-item ul { margin: .7rem 0 0; padding-left: 1.1rem; color: var(--muted); }
     .tl-item li { margin-bottom: .3rem; }
+    @media (max-width: 760px) {
+      .timeline::before { left: 6px; }
+      .tl-item, .tl-item:nth-child(odd), .tl-item:nth-child(even) {
+        left: 0; width: 100%; text-align: left; padding-left: 2rem;
+      }
+      .tl-item:nth-child(odd)::before, .tl-item:nth-child(even)::before {
+        left: -1px; right: auto; transform: translateX(-50%);
+      }
+      .tl-item:nth-child(odd) ul { padding-left: 1.1rem; padding-right: 0; text-align: left; }
+    }
 
     /* ===== CONTACT ===== */
     .contact { text-align: center; padding-bottom: 6rem; }
@@ -251,6 +275,13 @@
     .socials { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
     .socials a { font-family: var(--font-mono); font-size: .88rem; color: var(--muted); border: 1px solid var(--line); background: var(--surface); padding: .6rem 1.1rem; border-radius: 999px; transition: all .2s var(--ease); }
     .socials a:hover { color: var(--ink); border-color: var(--ink); transform: translateY(-2px); }
+    .copy-btn {
+      font-family: var(--font-mono); font-size: .88rem; color: var(--muted); border: 1px solid var(--line);
+      background: var(--surface); padding: .6rem 1.1rem; border-radius: 999px; cursor: pointer;
+      transition: all .2s var(--ease);
+    }
+    .copy-btn:hover { color: var(--ink); border-color: var(--ink); transform: translateY(-2px); }
+    .copy-btn.copied { color: #fff; background: var(--accent); border-color: var(--accent); }
 
     /* ===== FOOTER ===== */
     footer.site { border-top: 1px solid var(--line); padding: 2rem 0; }
@@ -421,7 +452,7 @@
     <!-- ===================== EXPERIENCE ===================== -->
     <section id="experience">
       <div class="wrap">
-        <div class="section-head reveal">
+        <div class="section-head reveal" style="text-align:center; margin-left:auto; margin-right:auto;">
           <p class="eyebrow">experience</p>
           <h2>Where I've worked</h2>
           <p>All roles remote. Client names withheld for confidentiality.</p>
@@ -471,11 +502,6 @@
               <li>Managed the full customer journey from inquiry to post-purchase, improving inquiry-to-sale conversion.</li>
             </ul>
           </div>
-          <div class="tl-item reveal">
-            <p class="when">Graduated 2026</p>
-            <h3>BSc in Information Technology</h3>
-            <p class="org">STI College</p>
-          </div>
         </div>
       </div>
     </section>
@@ -488,9 +514,10 @@
         <p class="reveal">Available for remote Technical VA, Shopify, and product-listing work. Reply within one business day.</p>
         <div class="socials reveal">
           <a href="https://www.upwork.com/freelancers/~0169cc1fbe248e8502" target="_blank" rel="noopener">Upwork</a>
+          <a href="https://www.onlinejobs.ph/jobseekers/info/3204758" target="_blank" rel="noopener">OnlineJobs.ph</a>
+          <a href="https://www.linkedin.com/in/kathrine-valenzuela-726b90413" target="_blank" rel="noopener">LinkedIn</a>
           <a href="mailto:kathrinevalenzuelakate@gmail.com">Email</a>
-          <!-- EDIT: phone is optional on a public page — remove this line if you'd rather keep it private -->
-          <a href="tel:+639669560619">+63 966 956 0619</a>
+          <button type="button" class="copy-btn" id="copyPhoneBtn" data-phone="+63 966 956 0619">WhatsApp / Signal</button>
         </div>
       </div>
     </section>
@@ -536,6 +563,31 @@
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
     }, { threshold: 0.12 });
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    /* ===== COPY PHONE NUMBER (WhatsApp / Signal) ===== */
+    const copyPhoneBtn = document.getElementById('copyPhoneBtn');
+    if (copyPhoneBtn) {
+      const originalLabel = copyPhoneBtn.textContent;
+      copyPhoneBtn.addEventListener('click', async () => {
+        const phone = copyPhoneBtn.dataset.phone;
+        try {
+          await navigator.clipboard.writeText(phone);
+        } catch (err) {
+          const tmp = document.createElement('textarea');
+          tmp.value = phone;
+          document.body.appendChild(tmp);
+          tmp.select();
+          document.execCommand('copy');
+          document.body.removeChild(tmp);
+        }
+        copyPhoneBtn.textContent = 'Copied!';
+        copyPhoneBtn.classList.add('copied');
+        setTimeout(() => {
+          copyPhoneBtn.textContent = originalLabel;
+          copyPhoneBtn.classList.remove('copied');
+        }, 1800);
+      });
+    }
 
     /* ===== PROJECT PREVIEW LIGHTBOX =====
        Add image paths here once screenshots are ready.
