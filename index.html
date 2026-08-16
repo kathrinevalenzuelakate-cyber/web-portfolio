@@ -141,14 +141,23 @@
     @media (max-width: 760px) { .about-grid { grid-template-columns: 1fr; gap: 2rem; } }
 
     /* ===== SKILLS ===== */
-    .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+    .skills-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1.2rem; }
+    .skills-grid .skill-card { grid-column: span 2; }
+    .skills-grid .skill-card:nth-child(4) { grid-column: 2 / 4; }
+    .skills-grid .skill-card:nth-child(5) { grid-column: 4 / 6; }
     .skill-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.6rem; transition: border-color .25s var(--ease), transform .25s var(--ease); }
     .skill-card:hover { border-color: var(--accent); transform: translateY(-3px); }
     .skill-card h3 { font-family: var(--font-display); font-size: 1.1rem; margin-bottom: .9rem; }
     .chips { display: flex; flex-wrap: wrap; gap: .5rem; }
     .chip { font-family: var(--font-mono); font-size: .78rem; color: var(--muted); background: var(--paper); border: 1px solid var(--line); padding: .3rem .65rem; border-radius: 7px; }
-    @media (max-width: 900px) { .skills-grid { grid-template-columns: 1fr 1fr; } }
-    @media (max-width: 560px) { .skills-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 900px) {
+      .skills-grid { grid-template-columns: 1fr 1fr; }
+      .skills-grid .skill-card, .skills-grid .skill-card:nth-child(4), .skills-grid .skill-card:nth-child(5) { grid-column: span 1; }
+    }
+    @media (max-width: 560px) {
+      .skills-grid { grid-template-columns: 1fr; }
+      .skills-grid .skill-card, .skills-grid .skill-card:nth-child(4), .skills-grid .skill-card:nth-child(5) { grid-column: span 1; }
+    }
 
     /* ===== WORK ===== */
     .featured {
@@ -387,13 +396,7 @@
           <div class="skill-card reveal">
             <h3>AI Tools</h3>
             <div class="chips">
-              <span class="chip">Claude</span><span class="chip">ChatGPT</span><span class="chip">Gemini</span><span class="chip">AI product imagery</span>
-            </div>
-          </div>
-          <div class="skill-card reveal">
-            <h3>Research</h3>
-            <div class="chips">
-              <span class="chip">Product-market fit</span><span class="chip">Competitor analysis</span><span class="chip">Demand forecasting</span><span class="chip">Pricing psychology</span>
+              <span class="chip">Claude</span><span class="chip">ChatGPT</span><span class="chip">Gemini</span><span class="chip">Lovable</span><span class="chip">GoHighLevel (GHL)</span>
             </div>
           </div>
         </div>
