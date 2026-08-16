@@ -189,6 +189,48 @@
     .project p { color: var(--muted); font-size: .93rem; }
     @media (max-width: 900px) { .projects { grid-template-columns: 1fr; } }
 
+    /* ===== PROJECT PREVIEW (clickable cards) ===== */
+    .project.previewable { cursor: pointer; border: 1px solid var(--line); }
+    .project.previewable:hover { border-color: var(--accent); }
+    .project.previewable:focus-visible { border-color: var(--accent); }
+    .preview-tag {
+      display: inline-flex; align-items: center; gap: .4rem; font-family: var(--font-mono);
+      font-size: .74rem; color: var(--accent); margin-top: 1rem;
+    }
+    .preview-tag::after { content: "↗"; }
+    .project.pending { opacity: .72; }
+    .project.pending .preview-tag { color: var(--muted); }
+    .project.pending .preview-tag::after { content: ""; }
+
+    .lightbox {
+      position: fixed; inset: 0; z-index: 200; display: none;
+      background: rgba(10,12,16,.86); backdrop-filter: blur(4px);
+      align-items: center; justify-content: center; padding: 4vh 4vw;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox-inner { position: relative; max-width: min(1000px, 92vw); max-height: 92vh; width: 100%; }
+    .lightbox-inner img { width: 100%; max-height: 82vh; object-fit: contain; border-radius: 10px; background: var(--surface); display: block; }
+    .lightbox-cap { color: #fff; font-family: var(--font-mono); font-size: .82rem; text-align: center; margin-top: 1rem; opacity: .8; }
+    .lightbox-close {
+      position: absolute; top: -46px; right: 0; background: none; border: 1px solid rgba(255,255,255,.35);
+      color: #fff; width: 36px; height: 36px; border-radius: 50%; font-size: 1.1rem; cursor: pointer;
+      display: grid; place-items: center; transition: border-color .2s var(--ease), transform .2s var(--ease);
+    }
+    .lightbox-close:hover { border-color: #fff; transform: rotate(90deg); }
+    .lightbox-nav {
+      position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.35); color: #fff; width: 40px; height: 40px; border-radius: 50%;
+      display: grid; place-items: center; cursor: pointer; font-size: 1rem; transition: background .2s var(--ease);
+    }
+    .lightbox-nav:hover { background: rgba(255,255,255,.22); }
+    .lightbox-nav.prev { left: -50px; }
+    .lightbox-nav.next { right: -50px; }
+    @media (max-width: 760px) {
+      .lightbox-nav.prev { left: 4px; }
+      .lightbox-nav.next { right: 4px; }
+      .lightbox-close { top: -42px; right: 0; }
+    }
+
     /* ===== EXPERIENCE ===== */
     .timeline { border-left: 2px solid var(--line); margin-left: 6px; }
     .tl-item { position: relative; padding: 0 0 2.4rem 2rem; }
@@ -354,20 +396,23 @@
 
         <!-- OTHER PROJECTS -->
         <div class="projects">
-          <article class="project reveal">
+          <article class="project previewable pending reveal" data-project="outdoor" tabindex="0" role="button" aria-haspopup="dialog">
             <span class="role">Web Dev · Technical VA</span>
             <h3>Outdoor Living Gear Store</h3>
             <p>Maintained a live premium storefront and built conversion funnels for robot mowers, saunas, and golf enclosures — plus custom Shopify sections, AI-assisted content, and automation workflows that cut manual work.</p>
+            <span class="preview-tag">Screenshots coming soon</span>
           </article>
-          <article class="project reveal">
-            <span class="role">Product Listing</span>
-            <h3>Kids Toys &amp; Essentials Store</h3>
-            <p>Ran end-to-end, GMC-compliant listings across every SKU. Resolved feed errors and kept Shopify-to-Merchant-Center sync clean for consistent Shopping visibility and faster approvals.</p>
-          </article>
-          <article class="project reveal">
+          <article class="project previewable pending reveal" data-project="fashion-belts" tabindex="0" role="button" aria-haspopup="dialog">
             <span class="role">Product Listing · AI Imagery</span>
-            <h3>Women's Fashion Store</h3>
+            <h3>Women's Fashion Store — Belts &amp; Accessories</h3>
             <p>Created SEO-optimized listings tailored to the brand's voice, and produced consistent, on-brand AI product imagery with ChatGPT and Gemini — replacing generic stock with premium visuals.</p>
+            <span class="preview-tag">Screenshots coming soon</span>
+          </article>
+          <article class="project previewable pending reveal" data-project="pet-essentials" tabindex="0" role="button" aria-haspopup="dialog">
+            <span class="role">Product Listing</span>
+            <h3>Pet Essentials Store</h3>
+            <p>Managed GMC-compliant product listings for a pet essentials catalog — accurate, policy-compliant copy and clean feed data to keep every SKU shopping-ready.</p>
+            <span class="preview-tag">Screenshots coming soon</span>
           </article>
         </div>
       </div>
@@ -451,6 +496,17 @@
     </section>
   </main>
 
+  <!-- ===================== PROJECT PREVIEW LIGHTBOX ===================== -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Project preview">
+    <div class="lightbox-inner">
+      <button class="lightbox-close" id="lightboxClose" aria-label="Close preview">✕</button>
+      <button class="lightbox-nav prev" id="lightboxPrev" aria-label="Previous image" style="display:none">‹</button>
+      <button class="lightbox-nav next" id="lightboxNext" aria-label="Next image" style="display:none">›</button>
+      <img id="lightboxImg" src="" alt="">
+      <p class="lightbox-cap" id="lightboxCap"></p>
+    </div>
+  </div>
+
   <footer class="site">
     <div class="wrap fwrap">
       <span>© <span id="year"></span> Kathrine Kate Valenzuela</span>
@@ -480,6 +536,65 @@
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
     }, { threshold: 0.12 });
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    /* ===== PROJECT PREVIEW LIGHTBOX =====
+       Add image paths here once screenshots are ready.
+       Each key matches a project card's data-project attribute. */
+    const projectPreviews = {
+      // "outdoor": { images: ["images/outdoor-1.jpg", "images/outdoor-2.jpg"], caption: "Outdoor Living Gear Store" },
+      // "fashion-belts": { images: ["images/belts-1.jpg"], caption: "Women's Fashion Store — Belts & Accessories" },
+      // "pet-essentials": { images: ["images/pet-1.jpg"], caption: "Pet Essentials Store" },
+    };
+
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxCap = document.getElementById('lightboxCap');
+    const lightboxClose = document.getElementById('lightboxClose');
+    const lightboxPrev = document.getElementById('lightboxPrev');
+    const lightboxNext = document.getElementById('lightboxNext');
+    let currentImages = [];
+    let currentIndex = 0;
+
+    function renderLightboxImage() {
+      lightboxImg.src = currentImages[currentIndex];
+      const showNav = currentImages.length > 1;
+      lightboxPrev.style.display = showNav ? 'grid' : 'none';
+      lightboxNext.style.display = showNav ? 'grid' : 'none';
+    }
+
+    function openLightbox(key) {
+      const data = projectPreviews[key];
+      if (!data || !data.images || !data.images.length) return; // no media yet, nothing to open
+      currentImages = data.images;
+      currentIndex = 0;
+      lightboxCap.textContent = data.caption || '';
+      renderLightboxImage();
+      lightbox.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.project.previewable').forEach(card => {
+      card.addEventListener('click', () => openLightbox(card.dataset.project));
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLightbox(card.dataset.project); }
+      });
+    });
+
+    lightboxClose.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+    lightboxPrev.addEventListener('click', () => { currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length; renderLightboxImage(); });
+    lightboxNext.addEventListener('click', () => { currentIndex = (currentIndex + 1) % currentImages.length; renderLightboxImage(); });
+    document.addEventListener('keydown', (e) => {
+      if (!lightbox.classList.contains('open')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') lightboxPrev.click();
+      if (e.key === 'ArrowRight') lightboxNext.click();
+    });
   </script>
 </body>
 </html>
